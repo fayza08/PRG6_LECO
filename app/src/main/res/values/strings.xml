@@ -16,4 +16,5 @@
     <string name="log_out">Log Out</string>
     <string name="search_recipe">Search Recipe</string>
     <string name="recipes">Recipes</string>
+    <string name="add_recipe">Add Recipe</string>
 </resources>

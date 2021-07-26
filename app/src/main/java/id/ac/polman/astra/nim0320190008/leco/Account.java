@@ -143,7 +143,8 @@ public class Account extends AppCompatActivity {
                 public void onResponse(Call<User> call, Response<User> response) {
                     if(response != null){
                         Toast.makeText(Account.this, "Data saved successfully", Toast.LENGTH_LONG).show();
-//                        startActivity(new Intent(SignUp.this,Login.class));
+                        refresh(id);
+                        startActivity(new Intent(Account.this, Dashboard.class));
                     }
                 }
 
@@ -157,6 +158,33 @@ public class Account extends AppCompatActivity {
         }
     }
 
+    private void refresh(Integer id){
+        mUserService = ApiUtils.getUserService();
+        Call<User> call = mUserService.getUserById(id);
+        call.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                if(response != null){
+                    User user = response.body();
+                    SharedPreferences.Editor edit = sharedPreferences.edit();
+                    edit.putString(EMAIL, user.getEmail());
+                    edit.putString(PASSWORD, user.getPassword());
+                    edit.putString(NAMA, user.getNama());
+                    edit.putInt(ID, user.getId());
+                    edit.apply();
+                }else{
+                    Toast.makeText(Account.this, "Failed To Save Data !", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                Log.e("Log In Error : ", t.getMessage());
+                Toast.makeText(Account.this, "Gagal Login!", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
     private void delete(Integer id){
         mUserService = ApiUtils.getUserService();
         Call<User> call = mUserService.deleteUserById(id);
@@ -166,6 +194,12 @@ public class Account extends AppCompatActivity {
                 if(response != null){
                     Toast.makeText(Account.this, "It Sad To See You Go! See you!", Toast.LENGTH_LONG).show();
                         startActivity(new Intent(Account.this, SignUp.class));
+                        SharedPreferences preferences = getSharedPreferences(APP_NAME, Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = preferences.edit();
+                        editor.clear();
+                        editor.apply();
+                        startActivity(new Intent(Account.this, MainActivity.class));
+                        finish();
                 }
             }
 

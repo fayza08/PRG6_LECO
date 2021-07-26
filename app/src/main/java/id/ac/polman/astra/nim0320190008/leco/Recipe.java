@@ -2,19 +2,72 @@ package id.ac.polman.astra.nim0320190008.leco;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.util.List;
+
+import id.ac.polman.astra.nim0320190008.leco.api.ApiUtils;
+import id.ac.polman.astra.nim0320190008.leco.api.Resep;
+import id.ac.polman.astra.nim0320190008.leco.api.ResepService;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class Recipe extends AppCompatActivity {
+    private ResepService mResepService;
+    Adapter mAdapter;
+    RecyclerView mRecyclerView;
+    LinearLayoutManager mLinearLayoutManager;
+    SharedPreferences sharedPreferences;
+    private Integer id_user;
+    private final static String APP_NAME= "LECO";
+    private final static String ID = "id";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe);
+
+        sharedPreferences = getSharedPreferences(APP_NAME, MODE_PRIVATE);
+        id_user = sharedPreferences.getInt(ID, 0);
+
+
+        mRecyclerView = findViewById(R.id.recipeList);
+        mLinearLayoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(mLinearLayoutManager);
+
+        mResepService = ApiUtils.getResepService();
+        Call<List<Resep>> call = mResepService.getResepByUser(id_user);
+
+        call.enqueue(new Callback<List<Resep>>() {
+            @Override
+            public void onResponse(Call<List<Resep>> call, Response<List<Resep>> response) {
+                if(response.isSuccessful()){
+                    List<Resep> posts = response.body();
+                    mAdapter = new Adapter(Recipe.this, posts);
+                    mRecyclerView.setAdapter(mAdapter);
+                    return;
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Resep>> call, Throwable t) {
+                Log.e("Get Resep Error : ", t.getMessage());
+                Toast.makeText(Recipe.this, "Gagal Get Data!", Toast.LENGTH_LONG).show();
+            }
+        });
+
+
 
         BottomNavigationView bottomNavigationView =findViewById(R.id.bottom_nav);
         bottomNavigationView.setSelectedItemId(R.id.recipe);

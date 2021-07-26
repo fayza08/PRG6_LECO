@@ -82,7 +82,7 @@ public class UserRepository {
         return cek;
     }
 
-    public MutableLiveData<User> getUser(String Id){
+    public MutableLiveData<User> getUser(Integer Id){
         MutableLiveData<User> user = new MutableLiveData<>();
 
         Call<User> call = mUserService.getUserById(Id);

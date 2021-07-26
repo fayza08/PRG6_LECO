@@ -27,7 +27,6 @@ import retrofit2.Response;
 
 public class Dashboard extends AppCompatActivity {
     private ResepService mResepService;
-    TextView data;
     Adapter mAdapter;
     RecyclerView mRecyclerView;
     LinearLayoutManager mLinearLayoutManager;
@@ -53,19 +52,6 @@ public class Dashboard extends AppCompatActivity {
                     mAdapter = new Adapter(Dashboard.this, posts);
                     mRecyclerView.setAdapter(mAdapter);
                     return;
-
-//                    for(Resep data : posts){
-//                        String resep = "\n";
-//                        resep += "Id : " + data.getId() + "\n";
-//                        resep += "Id_user : " + data.getId_user() + "\n";
-//                        resep += "nama : " + data.getNama()+ "\n";
-//                        resep += "alat_bahan : " + data.getAlat_bahan() + "\n";
-//                        resep += "tahap : " + data.getTahap() + "\n";
-//                        resep += "nilai : " + data.getNilai() + "\n";
-//                        resep += "keterangan : " + data.getKeterangan() + "\n";
-//                        resep += "foto : " + data.getFoto() + "\n";
-//                        resep += "status : " + data.getStatus() + "\n";
-//                    }
                 }
             }
 
@@ -75,22 +61,6 @@ public class Dashboard extends AppCompatActivity {
                 Toast.makeText(Dashboard.this, "Gagal Get Data!", Toast.LENGTH_LONG).show();
             }
         });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
         BottomNavigationView bottomNavigationView =findViewById(R.id.bottom_nav);

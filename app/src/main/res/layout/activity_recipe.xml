@@ -5,13 +5,57 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Recipe">
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:background="@color/colorAccent" />
+
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/title"
+        android:textColor="@color/colorBG"
         android:text="@string/recipe"
-        android:textSize="50sp"
         android:textStyle="bold"
-        android:layout_centerInParent="true"/>
+        android:textSize="30sp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/pathLinear2"
+        android:layout_marginTop="10dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/title">
+        <Button
+            android:id="@+id/addRecipe"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:text="@string/add_recipe"
+            android:textColor="@color/white"
+            app:layout_constraintTop_toBottomOf="@+id/title" />
+    </LinearLayout>
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recipeList"
+        android:scrollbars="none"
+        android:layout_marginTop="120dp"
+        android:clipToPadding="false"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="50dp"
+        tools:listitem="@layout/recipe_list"
+        app:layout_constraintTop_toBottomOf="@+id/pathLinear2" />
+
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:layout_width="match_parent"

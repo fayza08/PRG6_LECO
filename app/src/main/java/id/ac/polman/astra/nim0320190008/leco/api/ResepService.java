@@ -15,7 +15,7 @@ public interface ResepService {
     Call<Resep> getResepByID(@Query("id") String id);
 
     @GET("resep/user")
-    Call<Resep> getResepByUser(@Query("id") String id);
+    Call<List<Resep>> getResepByUser(@Query("id") Integer id);
 
     @GET("reseps")
     Call<List<Resep>> getReseps();
