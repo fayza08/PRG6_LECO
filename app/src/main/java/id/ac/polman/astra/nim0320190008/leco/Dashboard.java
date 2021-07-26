@@ -2,19 +2,96 @@ package id.ac.polman.astra.nim0320190008.leco;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.util.List;
+
+import id.ac.polman.astra.nim0320190008.leco.api.ApiUtils;
+import id.ac.polman.astra.nim0320190008.leco.api.Resep;
+import id.ac.polman.astra.nim0320190008.leco.api.ResepService;
+import id.ac.polman.astra.nim0320190008.leco.api.User;
+import id.ac.polman.astra.nim0320190008.leco.api.UserService;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class Dashboard extends AppCompatActivity {
+    private ResepService mResepService;
+    TextView data;
+    Adapter mAdapter;
+    RecyclerView mRecyclerView;
+    LinearLayoutManager mLinearLayoutManager;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
+
+        mRecyclerView = findViewById(R.id.recipeList);
+        mLinearLayoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(mLinearLayoutManager);
+
+        mResepService = ApiUtils.getResepService();
+        Call<List<Resep>> call = mResepService.getReseps();
+
+        call.enqueue(new Callback<List<Resep>>() {
+            @Override
+            public void onResponse(Call<List<Resep>> call, Response<List<Resep>> response) {
+                if(response.isSuccessful()){
+                    List<Resep> posts = response.body();
+                    mAdapter = new Adapter(Dashboard.this, posts);
+                    mRecyclerView.setAdapter(mAdapter);
+                    return;
+
+//                    for(Resep data : posts){
+//                        String resep = "\n";
+//                        resep += "Id : " + data.getId() + "\n";
+//                        resep += "Id_user : " + data.getId_user() + "\n";
+//                        resep += "nama : " + data.getNama()+ "\n";
+//                        resep += "alat_bahan : " + data.getAlat_bahan() + "\n";
+//                        resep += "tahap : " + data.getTahap() + "\n";
+//                        resep += "nilai : " + data.getNilai() + "\n";
+//                        resep += "keterangan : " + data.getKeterangan() + "\n";
+//                        resep += "foto : " + data.getFoto() + "\n";
+//                        resep += "status : " + data.getStatus() + "\n";
+//                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Resep>> call, Throwable t) {
+                Log.e("Get Resep Error : ", t.getMessage());
+                Toast.makeText(Dashboard.this, "Gagal Get Data!", Toast.LENGTH_LONG).show();
+            }
+        });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         BottomNavigationView bottomNavigationView =findViewById(R.id.bottom_nav);
         bottomNavigationView.setSelectedItemId(R.id.dashboard);

@@ -14,4 +14,6 @@
     <string name="save">Save</string>
     <string name="delete_account">Delete Account</string>
     <string name="log_out">Log Out</string>
+    <string name="search_recipe">Search Recipe</string>
+    <string name="recipes">Recipes</string>
 </resources>
