@@ -15,4 +15,8 @@ public class ApiUtils {
     public static ResepService getResepService(){
         return RetrofitClient.getClient(API_URL).create(ResepService.class);
     }
+
+    public static DisukaiService getDisukaiService(){
+        return RetrofitClient.getClient(API_URL).create(DisukaiService.class);
+    }
 }

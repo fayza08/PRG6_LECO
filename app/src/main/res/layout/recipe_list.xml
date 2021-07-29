@@ -43,6 +43,7 @@
                     android:maxLines="5"
                     android:text="@string/recipes"
                     android:textColor="@color/white"/>
+
             </LinearLayout>
 
         </RelativeLayout>
