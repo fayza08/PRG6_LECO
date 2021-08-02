@@ -2,6 +2,7 @@ package id.ac.polman.astra.nim0320190008.leco;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -10,6 +11,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -25,6 +28,11 @@ import retrofit2.Response;
 
 public class Recipe extends AppCompatActivity {
     private ResepService mResepService;
+    private EditText mResep;
+    private EditText mAlatBahan;
+    private EditText mStep;
+    private EditText mKeterangan;
+
     Adapter mAdapter;
     RecyclerView mRecyclerView;
     LinearLayoutManager mLinearLayoutManager;
@@ -45,6 +53,13 @@ public class Recipe extends AppCompatActivity {
         mRecyclerView = findViewById(R.id.recipeList);
         mLinearLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
+
+        findViewById(R.id.addRecipe).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(Recipe.this, AddRecipe.class));
+            }
+        });
 
         mResepService = ApiUtils.getResepService();
         Call<List<Resep>> call = mResepService.getResepByUser(id_user);
@@ -87,5 +102,49 @@ public class Recipe extends AppCompatActivity {
                 return false;
             }
         });
+    }
+
+    private void saveRecipe() {
+        String recipe = mResep.getText().toString().trim();
+        String alatbahan = mAlatBahan.getText().toString().trim();
+        String step = mStep.getText().toString().trim();
+        String keterangan = mKeterangan.getText().toString().trim();
+        Integer idsp = sharedPreferences.getInt(ID, 0);
+
+        if(recipe.isEmpty()) {
+            mResep.setError("Harap mengisi Field Resep");
+            mResep.requestFocus();
+            return;
+        } else if (alatbahan.isEmpty()) {
+            mAlatBahan.setError("Harap mengisi Field Alat Bahan");
+            mAlatBahan.requestFocus();
+            return;
+        } else if (step.isEmpty()) {
+            mStep.setError("Harap mengisi Field Tahapan");
+            mStep.requestFocus();
+            return;
+        } else if (keterangan.isEmpty()) {
+            mKeterangan.setError("Harap mengisi Field Keterangan");
+            mKeterangan.requestFocus();
+            return;
+        } else {
+            mResepService = ApiUtils.getResepService();
+            Call<Resep> call = mResepService.addResep(new Resep(0,idsp,recipe,alatbahan,step,1,keterangan,null,0));
+            call.enqueue(new Callback<Resep>() {
+                @Override
+                public void onResponse(Call<Resep> call, Response<Resep> response) {
+                    if(response != null) {
+                        Toast.makeText(Recipe.this,"Data Saved Succesfully", Toast.LENGTH_LONG).show();
+                        startActivity(new Intent(Recipe.this,Login.class));
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Resep> call, Throwable t) {
+                    Log.e("Create Error : ", t.getMessage());
+                    Toast.makeText(Recipe.this, "Data Gagal Disimpan", Toast.LENGTH_LONG).show();
+                }
+            });
+        }
     }
 }

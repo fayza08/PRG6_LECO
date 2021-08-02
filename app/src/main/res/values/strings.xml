@@ -5,6 +5,10 @@
     <string name="signup">Sign Up</string>
     <string name="name">Nama</string>
     <string name="email">Email</string>
+    <string name="resep">Nama Makanan</string>
+    <string name="ket">Keterangan</string>
+    <string name="step">Tahapan</string>
+    <string name="alatbahan">Alat dan Bahan</string>
     <string name="loginhere">Click <u>Here</u> To Login</string>
     <string name="signup_here">Click Here to Sign Up!</string>
     <string name="confirm_password">Confirm Password</string>

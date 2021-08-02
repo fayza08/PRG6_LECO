@@ -14,6 +14,7 @@
         android:usesCleartextTraffic="true">
         <activity android:name=".Account"></activity>
         <activity android:name=".Recipe" />
+        <activity android:name=".AddRecipe"/>
         <activity android:name=".Dashboard" />
         <activity android:name=".Login" />
         <activity android:name=".SignUp" />
