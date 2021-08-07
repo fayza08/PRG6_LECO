@@ -21,4 +21,8 @@
     <string name="search_recipe">Search Recipe</string>
     <string name="recipes">Recipes</string>
     <string name="add_recipe">Add Recipe</string>
+    <string name="description">Description</string>
+    <string name="ingredients">Ingredients</string>
+    <string name="steps">Steps</string>
+    <string name="search">Search</string>
 </resources>

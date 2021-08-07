@@ -2,18 +2,24 @@ package id.ac.polman.astra.nim0320190008.leco;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import id.ac.polman.astra.nim0320190008.leco.api.ApiUtils;
@@ -30,12 +36,14 @@ public class Dashboard extends AppCompatActivity {
     Adapter mAdapter;
     RecyclerView mRecyclerView;
     LinearLayoutManager mLinearLayoutManager;
-
+    List<Resep> posts;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
+
+        bottomNav();
 
         mRecyclerView = findViewById(R.id.recipeList);
         mLinearLayoutManager = new LinearLayoutManager(this);
@@ -48,10 +56,9 @@ public class Dashboard extends AppCompatActivity {
             @Override
             public void onResponse(Call<List<Resep>> call, Response<List<Resep>> response) {
                 if(response.isSuccessful()){
-                    List<Resep> posts = response.body();
-                    mAdapter = new Adapter(Dashboard.this, posts);
+                    posts = response.body();
+                    mAdapter = new Adapter(posts, "Dashboard");
                     mRecyclerView.setAdapter(mAdapter);
-                    return;
                 }
             }
 
@@ -63,6 +70,38 @@ public class Dashboard extends AppCompatActivity {
         });
 
 
+//        EditText search = findViewById(R.id.txtSearch);
+//        search.addTextChangedListener(new TextWatcher() {
+//            @Override
+//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//
+//            }
+//
+//            @Override
+//            public void onTextChanged(CharSequence s, int start, int before, int count) {
+//
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable s) {
+//                filter(s.toString());
+//            }
+//        });
+    }
+
+//    private void filter(String text){
+//        List<Resep> resep = null;
+//
+//        for(Resep r: posts){
+//            if(r.getNama().toLowerCase().contains(text.toLowerCase())){
+//                resep.add(r);
+//            }
+//        }
+//
+//        mAdapter.filterList(resep);
+//    }
+
+    private void bottomNav(){
         BottomNavigationView bottomNavigationView =findViewById(R.id.bottom_nav);
         bottomNavigationView.setSelectedItemId(R.id.dashboard);
 
@@ -81,5 +120,25 @@ public class Dashboard extends AppCompatActivity {
                 return false;
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.dashboard_menu, menu);
+        MenuItem item = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) item.getActionView();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                mAdapter.getFilter().filter(newText);
+                return false;
+            }
+        });
+        return super.onCreateOptionsMenu(menu);
     }
 }

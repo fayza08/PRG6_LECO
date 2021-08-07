@@ -54,7 +54,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textInputLayoutEmail"
+            android:id="@+id/textInputLayoutAB"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="30dp"
@@ -67,9 +67,10 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/alatbahan"
-                android:inputType="textPersonName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:lines="2"
+                android:scrollbars = "vertical"
                 android:drawableEnd="@drawable/ic_recipe"
                 android:drawableRight="@drawable/ic_recipe"
                 android:fontFamily="@font/poppinsmedium"
@@ -77,18 +78,19 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textInputLayoutPassword"
+            android:id="@+id/textInputLayoutTahap"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp"
             android:hint="@string/step"
-            app:layout_constraintTop_toBottomOf="@+id/textInputLayoutEmail"
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayoutAB"
             tools:layout_editor_absoluteX="0dp">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/step"
-                android:inputType="textPersonName"
+                android:lines="2"
+                android:scrollbars="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableEnd="@drawable/ic_recipe"
@@ -98,13 +100,13 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textInputLayoutPassword2"
+            android:id="@+id/textInputLayoutKet"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp"
             android:hint="@string/ket"
-            app:layout_constraintTop_toBottomOf="@+id/textInputLayoutPassword"
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayoutTahap"
             tools:layout_editor_absoluteX="0dp">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -125,7 +127,7 @@
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textInputLayoutPassword2" />
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayoutKet" />
 
         <Button
             android:id="@+id/btnSimpan"

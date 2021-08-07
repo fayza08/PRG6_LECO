@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".recipe_detail"
+    android:background="@color/colorBG"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/detail_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppinsbold"
+        android:gravity="left"
+        android:text="@string/recipe"
+        android:textSize="30sp"
+        android:layout_marginLeft="5dp"
+        android:textColor="@color/colorAccent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginRight="8dp"
+        tools:targetApi="jelly_bean" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:id="@+id/detail_foto"
+        android:scaleType="centerCrop"
+        android:layout_marginTop="20dp"
+        app:layout_constraintTop_toBottomOf="@+id/detail_title"
+        />
+
+    <TextView
+        android:id="@+id/detail_liked"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableEnd="@drawable/ic_liked"
+        android:fontFamily="@font/poppinsmedium"
+        android:layout_marginRight="5dp"
+        android:gravity="right"
+        android:text="@string/app_name"
+        android:textColor="@color/colorAccent"
+        android:textSize="15sp"
+        tools:targetApi="jelly_bean" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+        <TextView
+                android:id="@+id/txtDesc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppinsbold"
+                android:gravity="left"
+                android:layout_marginLeft="5dp"
+                android:text="@string/description"
+                android:textSize="20sp"
+                android:textColor="@color/colorAccent"
+                android:layout_marginTop="10dp"
+                app:layout_constraintTop_toBottomOf="@+id/detail_foto"
+                tools:targetApi="jelly_bean" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:text="@string/description"
+                android:id="@+id/detail_desk"
+                android:textSize="20sp"
+                app:layout_constraintTop_toBottomOf="@+id/txtDesc"
+                />
+
+            <TextView
+                android:id="@+id/txtIngredients"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppinsbold"
+                android:gravity="left"
+                android:layout_marginLeft="5dp"
+                android:text="@string/ingredients"
+                android:textSize="20sp"
+                android:textColor="@color/colorAccent"
+                android:layout_marginTop="10dp"
+                app:layout_constraintTop_toBottomOf="@+id/detail_desk"
+                tools:targetApi="jelly_bean" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:text="@string/ingredients"
+                android:id="@+id/detail_ingredients"
+                android:textSize="20sp"
+                app:layout_constraintTop_toBottomOf="@+id/txtIngredients"
+                />
+
+            <TextView
+                android:id="@+id/txtSteps"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppinsbold"
+                android:gravity="left"
+                android:layout_marginLeft="5dp"
+                android:text="@string/steps"
+                android:textSize="20sp"
+                android:textColor="@color/colorAccent"
+                android:layout_marginTop="10dp"
+                app:layout_constraintTop_toBottomOf="@+id/detail_ingredients"
+                tools:targetApi="jelly_bean" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:text="@string/steps"
+                android:id="@+id/detail_step"
+                android:textSize="20sp"
+                app:layout_constraintTop_toBottomOf="@+id/txtSteps"
+                />
+        </LinearLayout>
+    </ScrollView>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/bottom_nav"
+        app:itemBackground="@color/colorAccent"
+        app:itemTextColor="@drawable/selector"
+        app:itemIconTint="@drawable/selector"
+        app:menu="@menu/menu_navigation"
+        android:layout_alignParentBottom="true"
+        />
+
+</LinearLayout>

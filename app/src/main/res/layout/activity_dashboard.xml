@@ -8,31 +8,17 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="220dp"
-            android:background="@color/colorAccent" />
-
-        <TextView
-            android:id="@+id/title"
-            android:textColor="@color/colorBG"
-            android:text="@string/app_name"
-            android:textStyle="bold"
-            android:textSize="30sp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginTop="20dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:background="@color/colorAccent"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recipeList"
                 android:scrollbars="none"
                 android:layout_marginTop="10dp"
-                android:clipToPadding="false"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
                 android:layout_marginBottom="50dp"
-
                 tools:listitem="@layout/recipe_list"/>
 
 

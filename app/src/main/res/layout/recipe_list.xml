@@ -12,6 +12,7 @@
 <!--        android:layout_width="match_parent"-->
 <!--        android:layout_height="wrap_content">-->
         <RelativeLayout
+            android:id="@+id/selectResep"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="10dp"
@@ -43,7 +44,11 @@
                     android:maxLines="5"
                     android:text="@string/recipes"
                     android:textColor="@color/white"/>
-
+                <TextView
+                    android:id="@+id/recipe_liked"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="invisible"/>
             </LinearLayout>
 
         </RelativeLayout>

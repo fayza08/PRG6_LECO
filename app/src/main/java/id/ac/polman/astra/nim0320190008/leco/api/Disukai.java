@@ -3,6 +3,8 @@ package id.ac.polman.astra.nim0320190008.leco.api;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Date;
+
 public class Disukai {
     @SerializedName("id")
     @Expose
@@ -18,12 +20,12 @@ public class Disukai {
 
     @SerializedName("tanggal")
     @Expose
-    private Integer tanggal;
+    private Date tanggal;
 
     public Disukai() {
     }
 
-    public Disukai(Integer id, Integer id_user, Integer id_resep, Integer tanggal) {
+    public Disukai(Integer id, Integer id_user, Integer id_resep, Date tanggal) {
         this.id = id;
         this.id_user = id_user;
         this.id_resep = id_resep;
@@ -54,11 +56,11 @@ public class Disukai {
         this.id_resep = id_resep;
     }
 
-    public Integer getTanggal() {
+    public Date getTanggal() {
         return tanggal;
     }
 
-    public void setTanggal(Integer tanggal) {
+    public void setTanggal(Date tanggal) {
         this.tanggal = tanggal;
     }
 }
