@@ -1,6 +1,7 @@
 package id.ac.polman.astra.nim0320190008.leco;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
@@ -58,11 +59,13 @@ public class Adapter extends RecyclerView.Adapter<Adapter.AdapterHolder> {
     public void onBindViewHolder(@NonNull AdapterHolder holder, int position) {
         final Resep resep = mReseps.get(position);
 
+
         String title = resep.getNama();
         String desk = resep.getKeterangan();
-//        String image = resep.getFoto();
+        String image = resep.getFoto();
         holder.title.setText(title);
         holder.keterangan.setText(desk);
+        holder.mResep = resep;
 
 
         sharedPreferences = mContext.getSharedPreferences(APP_NAME, MODE_PRIVATE);
@@ -94,9 +97,13 @@ public class Adapter extends RecyclerView.Adapter<Adapter.AdapterHolder> {
         });
 
 
+        if (image == null || image.equals("")) {
         Glide.with(holder.itemView.getContext()).load(pathImage)
                 .apply(new RequestOptions().fitCenter())
                 .into(holder.foto);
+        } else {
+            holder.foto.setImageBitmap(Picture.convertToImage(image));
+        }
     }
 
     @Override
@@ -104,9 +111,10 @@ public class Adapter extends RecyclerView.Adapter<Adapter.AdapterHolder> {
         return mReseps.size();
     }
 
-    public class AdapterHolder extends RecyclerView.ViewHolder {
+    public class AdapterHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView title, keterangan;
         ImageView foto;
+        Resep mResep;
 
         public AdapterHolder(@NonNull View itemView) {
             super(itemView);
@@ -114,6 +122,23 @@ public class Adapter extends RecyclerView.Adapter<Adapter.AdapterHolder> {
             title = itemView.findViewById(R.id.recipe_list_title);
             keterangan = itemView.findViewById(R.id.recipe_list_desc);
             foto = itemView.findViewById(R.id.recipe_list_image);
+
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+
+            Log.e("Adapter","Berhasil Masuk Edit");
+
+            Intent intent = new Intent(mContext, EditRecipe.class);
+            intent.putExtra("id", mResep.getId());
+            intent.putExtra("nama", mResep.getNama());
+            intent.putExtra("alat", mResep.getAlat_bahan());
+            intent.putExtra("tahap",mResep.getTahap());
+            intent.putExtra("ket", mResep.getKeterangan());
+            mContext.startActivity(intent);
+
         }
     }
 }

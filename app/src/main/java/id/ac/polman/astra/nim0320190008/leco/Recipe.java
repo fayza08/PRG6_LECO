@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.gson.Gson;
 
 import java.util.List;
 
@@ -71,6 +72,9 @@ public class Recipe extends AppCompatActivity {
                     List<Resep> posts = response.body();
                     mAdapter = new Adapter(Recipe.this, posts);
                     mRecyclerView.setAdapter(mAdapter);
+                    for (Resep r : posts) {
+                        Log.e("Image" , "image = " + new Gson().toJson(r));
+                    }
                     return;
                 }
             }
