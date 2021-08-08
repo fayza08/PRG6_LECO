@@ -23,6 +23,7 @@
         <activity android:name=".Dashboard" />
         <activity android:name=".Login" />
         <activity android:name=".SignUp" />
+        <activity android:name=".recipe_detail" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

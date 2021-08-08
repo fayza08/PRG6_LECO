@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import id.ac.polman.astra.nim0320190008.leco.api.ApiUtils;
+import id.ac.polman.astra.nim0320190008.leco.api.DisukaiService;
 import id.ac.polman.astra.nim0320190008.leco.api.Resep;
 import id.ac.polman.astra.nim0320190008.leco.api.ResepService;
 import id.ac.polman.astra.nim0320190008.leco.api.User;
@@ -33,6 +34,7 @@ import retrofit2.Response;
 
 public class Dashboard extends AppCompatActivity {
     private ResepService mResepService;
+    private DisukaiService mDisukaiService;
     Adapter mAdapter;
     RecyclerView mRecyclerView;
     LinearLayoutManager mLinearLayoutManager;
@@ -43,42 +45,72 @@ public class Dashboard extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
 
-        bottomNav();
-
         mRecyclerView = findViewById(R.id.recipeList);
         mLinearLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
 
-        mResepService = ApiUtils.getResepService();
-        Call<List<Resep>> call = mResepService.getReseps();
-
-        call.enqueue(new Callback<List<Resep>>() {
-            @Override
-            public void onResponse(Call<List<Resep>> call, Response<List<Resep>> response) {
-                if (response.isSuccessful()) {
-                    posts = response.body();
-                    mAdapter = new Adapter(posts,Dashboard.this, "Dashboard");
-                    mRecyclerView.setAdapter(mAdapter);
+        Intent intent = getIntent();
+        if(intent.getExtras() != null){
+            bottomNav(2);
+            mDisukaiService = ApiUtils.getDisukaiService();
+            Integer idu = intent.getIntExtra("history", 0);
+            Call<List<Resep>> call = mDisukaiService.getDisukaiByID(idu);
+            call.enqueue(new Callback<List<Resep>>() {
+                @Override
+                public void onResponse(Call<List<Resep>> call, Response<List<Resep>> response) {
+                    if (response.isSuccessful()) {
+                        posts = response.body();
+                        mAdapter = new Adapter(posts, Dashboard.this, "Dashboard");
+                        mRecyclerView.setAdapter(mAdapter);
+                    }
                 }
-            }
 
-            @Override
-            public void onFailure(Call<List<Resep>> call, Throwable t) {
-                Log.e("Get Resep Error : ", t.getMessage());
-                Toast.makeText(Dashboard.this, "Gagal Get Data!", Toast.LENGTH_LONG).show();
-            }
-        });
+                @Override
+                public void onFailure(Call<List<Resep>> call, Throwable t) {
+                    Log.e("Get Resep Error : ", t.getMessage());
+                    Toast.makeText(Dashboard.this, "Gagal Get Data!", Toast.LENGTH_LONG).show();
+                }
+            });
+        }else {
+
+            bottomNav(1);
+            mResepService = ApiUtils.getResepService();
+            Call<List<Resep>> call = mResepService.getReseps();
+
+            call.enqueue(new Callback<List<Resep>>() {
+                @Override
+                public void onResponse(Call<List<Resep>> call, Response<List<Resep>> response) {
+                    if (response.isSuccessful()) {
+                        posts = response.body();
+                        mAdapter = new Adapter(posts, Dashboard.this, "Dashboard");
+                        mRecyclerView.setAdapter(mAdapter);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<List<Resep>> call, Throwable t) {
+                    Log.e("Get Resep Error : ", t.getMessage());
+                    Toast.makeText(Dashboard.this, "Gagal Get Data!", Toast.LENGTH_LONG).show();
+                }
+            });
+        }
     }
 
-    private void bottomNav(){
-        BottomNavigationView bottomNavigationView =findViewById(R.id.bottom_nav);
-        bottomNavigationView.setSelectedItemId(R.id.dashboard);
+    private void bottomNav(Integer no){
 
+        BottomNavigationView bottomNavigationView =findViewById(R.id.bottom_nav);
+        if(no == 1){
+            bottomNavigationView.setSelectedItemId(R.id.dashboard);
+        }else{
+            bottomNavigationView.setSelectedItemId(R.id.account);
+        }
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()){
-                    case R.id.dashboard: return true;
+                    case R.id.dashboard:
+                        startActivity(new Intent(getApplicationContext(), Dashboard.class));
+                        overridePendingTransition(0,0); return true;
                     case R.id.account:
                         startActivity(new Intent(getApplicationContext(), Account.class));
                         overridePendingTransition(0,0); return true;

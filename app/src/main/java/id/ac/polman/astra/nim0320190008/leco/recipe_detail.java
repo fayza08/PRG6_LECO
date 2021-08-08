@@ -36,6 +36,7 @@ public class recipe_detail extends AppCompatActivity {
 
     TextView desc, title, ingredients, steps, liked;
     private DisukaiService mDisukaiService;
+    private ResepService mResepService;
 
     private Resep mResep;
     private final static String APP_NAME= "LECO";
@@ -76,12 +77,7 @@ public class recipe_detail extends AppCompatActivity {
             public void onClick(View v) {
                 SharedPreferences sharedPreferences = getSharedPreferences(APP_NAME, MODE_PRIVATE);
                 Integer idsp = sharedPreferences.getInt(ID, 0);
-                boolean cek = checkLike(idsp);
-                if(!cek){
-                   like(idsp);
-                }else{
-                    dislike(idsp);
-                }
+                checkLike(idsp);
             }
         });
 
@@ -114,7 +110,7 @@ public class recipe_detail extends AppCompatActivity {
             public void onResponse(Call<Disukai> call, Response<Disukai> response) {
                 if(response != null) {
                     Toast.makeText(recipe_detail.this,"Data Saved Succesfully", Toast.LENGTH_LONG).show();
-                    liked.setText(mResep.getNilai().toString());
+                    updateNilai();
                     liked.setCompoundDrawablesWithIntrinsicBounds(null, null, ContextCompat.getDrawable(getApplicationContext(),R.drawable.ic_like), null);
                 }
             }
@@ -135,7 +131,7 @@ public class recipe_detail extends AppCompatActivity {
             public void onResponse(Call<Disukai> call, Response<Disukai> response) {
                 if(response != null) {
                     Toast.makeText(recipe_detail.this,"Data Successfully Deleted", Toast.LENGTH_LONG).show();
-                    liked.setText(mResep.getNilai().toString());
+                    updateNilai();
                     liked.setCompoundDrawablesWithIntrinsicBounds(null, null, ContextCompat.getDrawable(getApplicationContext(),R.drawable.ic_liked), null);
                 }
             }
@@ -148,9 +144,8 @@ public class recipe_detail extends AppCompatActivity {
         });
     }
 
-    private boolean checkLike(Integer idsp){
-        final boolean[] liked = {false};
-
+    private void checkLike(Integer idsp){
+        final String[] liked = {"tidak"};
         mDisukaiService = ApiUtils.getDisukaiService();
         Call<List<Resep>> call = mDisukaiService.getDisukaiByID(idsp);
         call.enqueue(new Callback<List<Resep>>() {
@@ -160,9 +155,15 @@ public class recipe_detail extends AppCompatActivity {
                     List<Resep> reseps = response.body();
                     for (Resep r : reseps) {
                         if (mResep.getId().equals(r.getId())) {
-                            liked[0] = true;
+                            liked[0] = "ada";
                         }
                     }
+                }
+
+                if(liked[0].equals("ada")){
+                    dislike(idsp);
+                }else{
+                    like(idsp);
                 }
             }
 
@@ -173,6 +174,22 @@ public class recipe_detail extends AppCompatActivity {
             }
         });
 
-        return liked[0];
+    }
+
+    private void updateNilai(){
+        mResepService = ApiUtils.getResepService();
+        Call<Resep> call = mResepService.getResepByID(mResep.getId().toString());
+        call.enqueue(new Callback<Resep>() {
+            @Override
+            public void onResponse(Call<Resep> call, Response<Resep> response) {
+                mResep = response.body();
+                liked.setText(mResep.getNilai().toString());
+            }
+
+            @Override
+            public void onFailure(Call<Resep> call, Throwable t) {
+
+            }
+        });
     }
 }

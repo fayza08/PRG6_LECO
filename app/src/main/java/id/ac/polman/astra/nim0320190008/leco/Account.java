@@ -2,12 +2,14 @@ package id.ac.polman.astra.nim0320190008.leco;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
@@ -211,5 +213,25 @@ public class Account extends AppCompatActivity {
         });
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.liked_menu, menu);
+        MenuItem item = menu.findItem(R.id.action_like);
+        item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+
+                sharedPreferences = getSharedPreferences(APP_NAME, MODE_PRIVATE);
+                Integer idsp = sharedPreferences.getInt(ID, 0);
+
+                Intent intent = new Intent(Account.this, Dashboard.class);
+                intent.putExtra("history", idsp);
+                Account.this.startActivity(intent);
+//                startActivity(new Intent(Account.this, Dashboard.class));
+                return true;
+            }
+        });
+        return super.onCreateOptionsMenu(menu);
+    }
 
 }

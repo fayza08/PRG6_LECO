@@ -96,6 +96,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.AdapterHolder> impleme
                         if(resep.getId().equals(r.getId())){liked = true;}
                     }
                     if(liked){
+                        holder.fav.setText("Liked");
                         holder.keterangan.setCompoundDrawablesWithIntrinsicBounds(null, null, ContextCompat.getDrawable(mContext,R.drawable.ic_like), null);
                     }else {
                         holder.keterangan.setCompoundDrawablesWithIntrinsicBounds(null, null, ContextCompat.getDrawable(mContext, R.drawable.ic_liked), null);
