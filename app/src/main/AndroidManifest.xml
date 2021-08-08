@@ -3,6 +3,10 @@
     package="id.ac.polman.astra.nim0320190008.leco">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA"/>
+
+    <uses-feature android:name="android.hardware.camera"
+        android:required="false"/>
 
     <application
         android:allowBackup="true"
@@ -12,10 +16,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.LECO"
         android:usesCleartextTraffic="true">
-        <activity android:name=".recipe_detail"></activity>
-        <activity android:name=".Account" />
+        <activity android:name=".Account"/>
         <activity android:name=".Recipe" />
-        <activity android:name=".AddRecipe" />
+        <activity android:name=".AddRecipe"/>
+        <activity android:name=".EditRecipe"/>
         <activity android:name=".Dashboard" />
         <activity android:name=".Login" />
         <activity android:name=".SignUp" />
@@ -26,6 +30,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <provider
+            android:authorities="id.ac.polman.astra.nim0320190008.leco"
+            android:name="androidx.core.content.FileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/files"/>
+        </provider>
     </application>
 
 </manifest>

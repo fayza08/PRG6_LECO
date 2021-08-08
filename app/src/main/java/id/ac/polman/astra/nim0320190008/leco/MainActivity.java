@@ -1,11 +1,15 @@
 package id.ac.polman.astra.nim0320190008.leco;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 public class MainActivity extends AppCompatActivity {
@@ -28,5 +32,17 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this, SignUp.class));
             }
         });
+
+        ActivityResultLauncher<String[]> requestMultiplePermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), result -> {
+
+        });
+
+        requestMultiplePermissionLauncher.launch(
+                new String[]{
+//                        Manifest.permission.READ_EXTERNAL_STORAGE,
+                       Manifest.permission.CAMERA
+//                        Manifest.permission.ACCESS_FINE_LOCATION
+                }
+        );
     }
 }
