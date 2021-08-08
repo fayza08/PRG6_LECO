@@ -3,7 +3,9 @@ package id.ac.polman.astra.nim0320190008.leco.api;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Resep {
+import java.io.Serializable;
+
+public class Resep implements Serializable {
     @SerializedName("id")
     @Expose
     private Integer id;
