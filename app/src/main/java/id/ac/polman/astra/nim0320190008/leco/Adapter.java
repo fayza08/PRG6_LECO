@@ -89,7 +89,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.AdapterHolder> impleme
                     for( Resep r : reseps){
                         if(resep.getId().equals(r.getId())){
                             liked = true;
-                        };
+                        }
                     }
                     if(liked){
                         holder.fav.setText("Liked");

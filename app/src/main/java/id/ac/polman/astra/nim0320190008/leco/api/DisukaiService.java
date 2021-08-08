@@ -4,6 +4,7 @@ import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
@@ -17,4 +18,7 @@ public interface DisukaiService {
 
     @POST("disukai")
     Call<Disukai> addDisukai(@Body Disukai Disukai);
+
+    @DELETE("disukai")
+    Call<Disukai> deleteDisukai(@Query("id_user") Integer id_user, @Query("id_resep") Integer id_resep);
 }

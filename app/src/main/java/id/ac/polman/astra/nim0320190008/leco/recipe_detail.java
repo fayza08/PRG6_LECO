@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.Date;
+import java.util.List;
 
 import id.ac.polman.astra.nim0320190008.leco.api.ApiUtils;
 import id.ac.polman.astra.nim0320190008.leco.api.Disukai;
@@ -37,10 +38,9 @@ public class recipe_detail extends AppCompatActivity {
     private DisukaiService mDisukaiService;
 
     private Resep mResep;
-    SharedPreferences sharedPreferences;
     private final static String APP_NAME= "LECO";
     private final static String ID = "id";
-    private boolean cek = false;
+    SharedPreferences sharedPreferences = getSharedPreferences(APP_NAME, MODE_PRIVATE);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +65,6 @@ public class recipe_detail extends AppCompatActivity {
             String fav = intent.getStringExtra("fav");
 
             if(fav.equals("Liked")){
-                cek=true;
                 liked.setCompoundDrawablesWithIntrinsicBounds(null, null, ContextCompat.getDrawable(this,R.drawable.ic_like), null);
             }else{
                 liked.setCompoundDrawablesWithIntrinsicBounds(null, null, ContextCompat.getDrawable(this,R.drawable.ic_liked), null);
@@ -76,31 +75,13 @@ public class recipe_detail extends AppCompatActivity {
         liked.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sharedPreferences = getSharedPreferences(APP_NAME, MODE_PRIVATE);
+
                 Integer idsp = sharedPreferences.getInt(ID, 0);
-
+                boolean cek = checkLike(idsp);
                 if(!cek){
-                    mDisukaiService = ApiUtils.getDisukaiService();
-                    Call<Disukai> call = mDisukaiService.addDisukai(new Disukai(1, idsp, mResep.getId(), new Date()));
-                    call.enqueue(new Callback<Disukai>() {
-                        @Override
-                        public void onResponse(Call<Disukai> call, Response<Disukai> response) {
-                            if(response != null) {
-                                Toast.makeText(recipe_detail.this,"Data Saved Succesfully", Toast.LENGTH_LONG).show();
-                                liked.setText(mResep.getNilai().toString());
-                                liked.setCompoundDrawablesWithIntrinsicBounds(null, null, ContextCompat.getDrawable(getApplicationContext(),R.drawable.ic_like), null);
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(Call<Disukai> call, Throwable t) {
-                            Log.e("Create Error : ", t.getMessage());
-                            Toast.makeText(recipe_detail.this, "Data Gagal Disimpan", Toast.LENGTH_LONG).show();
-                        }
-                    });
+                   like(idsp);
                 }else{
-                    Toast.makeText(recipe_detail.this,"Data Saved Succesfully", Toast.LENGTH_LONG).show();
-                    liked.setCompoundDrawablesWithIntrinsicBounds(null, null, ContextCompat.getDrawable(getApplicationContext(),R.drawable.ic_liked), null);
+                    dislike(idsp);
                 }
             }
         });
@@ -124,5 +105,75 @@ public class recipe_detail extends AppCompatActivity {
                 return false;
             }
         });
+    }
+
+    private void like(Integer idsp){
+        mDisukaiService = ApiUtils.getDisukaiService();
+        Call<Disukai> call = mDisukaiService.addDisukai(new Disukai(1, idsp, mResep.getId(), new Date()));
+        call.enqueue(new Callback<Disukai>() {
+            @Override
+            public void onResponse(Call<Disukai> call, Response<Disukai> response) {
+                if(response != null) {
+                    Toast.makeText(recipe_detail.this,"Data Saved Succesfully", Toast.LENGTH_LONG).show();
+                    liked.setText(mResep.getNilai().toString());
+                    liked.setCompoundDrawablesWithIntrinsicBounds(null, null, ContextCompat.getDrawable(getApplicationContext(),R.drawable.ic_like), null);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Disukai> call, Throwable t) {
+                Log.e("Create Error : ", t.getMessage());
+                Toast.makeText(recipe_detail.this, "Data Gagal Disimpan", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    private void dislike(Integer idsp){
+        mDisukaiService = ApiUtils.getDisukaiService();
+        Call<Disukai> call = mDisukaiService.deleteDisukai(idsp, mResep.getId());
+        call.enqueue(new Callback<Disukai>() {
+            @Override
+            public void onResponse(Call<Disukai> call, Response<Disukai> response) {
+                if(response != null) {
+                    Toast.makeText(recipe_detail.this,"Data Successfully Deleted", Toast.LENGTH_LONG).show();
+                    liked.setText(mResep.getNilai().toString());
+                    liked.setCompoundDrawablesWithIntrinsicBounds(null, null, ContextCompat.getDrawable(getApplicationContext(),R.drawable.ic_liked), null);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Disukai> call, Throwable t) {
+                Log.e("Create Error : ", t.getMessage());
+                Toast.makeText(recipe_detail.this, "Data Gagal Disimpan", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    private boolean checkLike(Integer idsp){
+        final boolean[] liked = {false};
+
+        mDisukaiService = ApiUtils.getDisukaiService();
+        Call<List<Resep>> call = mDisukaiService.getDisukaiByID(idsp);
+        call.enqueue(new Callback<List<Resep>>() {
+            @Override
+            public void onResponse(Call<List<Resep>> call, Response<List<Resep>> response) {
+                if(response.isSuccessful()) {
+                    List<Resep> reseps = response.body();
+                    for (Resep r : reseps) {
+                        if (mResep.getId().equals(r.getId())) {
+                            liked[0] = true;
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Resep>> call, Throwable t) {
+                Log.e("Like Error : ", t.getMessage());
+                Toast.makeText(recipe_detail.this, "Failed to get data!", Toast.LENGTH_LONG).show();
+            }
+        });
+
+        return liked[0];
     }
 }

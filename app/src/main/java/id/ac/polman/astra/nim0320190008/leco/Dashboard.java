@@ -55,7 +55,7 @@ public class Dashboard extends AppCompatActivity {
         call.enqueue(new Callback<List<Resep>>() {
             @Override
             public void onResponse(Call<List<Resep>> call, Response<List<Resep>> response) {
-                if(response.isSuccessful()){
+                if (response.isSuccessful()) {
                     posts = response.body();
                     mAdapter = new Adapter(posts, "Dashboard");
                     mRecyclerView.setAdapter(mAdapter);
@@ -68,38 +68,7 @@ public class Dashboard extends AppCompatActivity {
                 Toast.makeText(Dashboard.this, "Gagal Get Data!", Toast.LENGTH_LONG).show();
             }
         });
-
-
-//        EditText search = findViewById(R.id.txtSearch);
-//        search.addTextChangedListener(new TextWatcher() {
-//            @Override
-//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-//
-//            }
-//
-//            @Override
-//            public void onTextChanged(CharSequence s, int start, int before, int count) {
-//
-//            }
-//
-//            @Override
-//            public void afterTextChanged(Editable s) {
-//                filter(s.toString());
-//            }
-//        });
     }
-
-//    private void filter(String text){
-//        List<Resep> resep = null;
-//
-//        for(Resep r: posts){
-//            if(r.getNama().toLowerCase().contains(text.toLowerCase())){
-//                resep.add(r);
-//            }
-//        }
-//
-//        mAdapter.filterList(resep);
-//    }
 
     private void bottomNav(){
         BottomNavigationView bottomNavigationView =findViewById(R.id.bottom_nav);
