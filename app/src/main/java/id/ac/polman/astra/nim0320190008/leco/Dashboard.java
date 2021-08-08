@@ -57,7 +57,7 @@ public class Dashboard extends AppCompatActivity {
             public void onResponse(Call<List<Resep>> call, Response<List<Resep>> response) {
                 if (response.isSuccessful()) {
                     posts = response.body();
-                    mAdapter = new Adapter(posts, "Dashboard");
+                    mAdapter = new Adapter(posts,Dashboard.this, "Dashboard");
                     mRecyclerView.setAdapter(mAdapter);
                 }
             }

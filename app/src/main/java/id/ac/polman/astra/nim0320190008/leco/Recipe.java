@@ -70,7 +70,7 @@ public class Recipe extends AppCompatActivity {
             public void onResponse(Call<List<Resep>> call, Response<List<Resep>> response) {
                 if(response.isSuccessful()){
                     List<Resep> posts = response.body();
-                    mAdapter = new Adapter(posts, "Edit");
+                    mAdapter = new Adapter(posts, Recipe.this, "Edit");
                     mRecyclerView.setAdapter(mAdapter);
                     for (Resep r : posts) {
                         Log.e("Image" , "image = " + new Gson().toJson(r));
