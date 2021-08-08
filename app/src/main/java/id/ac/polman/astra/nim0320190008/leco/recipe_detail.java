@@ -40,7 +40,6 @@ public class recipe_detail extends AppCompatActivity {
     private Resep mResep;
     private final static String APP_NAME= "LECO";
     private final static String ID = "id";
-    SharedPreferences sharedPreferences = getSharedPreferences(APP_NAME, MODE_PRIVATE);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +74,7 @@ public class recipe_detail extends AppCompatActivity {
         liked.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                SharedPreferences sharedPreferences = getSharedPreferences(APP_NAME, MODE_PRIVATE);
                 Integer idsp = sharedPreferences.getInt(ID, 0);
                 boolean cek = checkLike(idsp);
                 if(!cek){
