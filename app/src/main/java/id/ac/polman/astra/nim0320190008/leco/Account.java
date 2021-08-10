@@ -1,10 +1,12 @@
 package id.ac.polman.astra.nim0320190008.leco;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -98,12 +100,29 @@ public class Account extends AppCompatActivity {
         findViewById(R.id.btnLogout).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SharedPreferences preferences = getSharedPreferences(APP_NAME, Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = preferences.edit();
-                editor.clear();
-                editor.apply();
-                startActivity(new Intent(Account.this, MainActivity.class));
-                finish();
+                AlertDialog.Builder builder = new AlertDialog.Builder(Account.this);
+                builder.setCancelable(true);
+                builder.setTitle("Logout");
+                builder.setMessage("Are you sure to logout?");
+                builder.setPositiveButton("Confirm",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                SharedPreferences preferences = getSharedPreferences(APP_NAME, Context.MODE_PRIVATE);
+                                SharedPreferences.Editor editor = preferences.edit();
+                                editor.clear();
+                                editor.apply();
+                                startActivity(new Intent(Account.this, MainActivity.class));
+                                finish();
+                            }
+                        });
+                builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                });
+                AlertDialog dialog = builder.create();
+                dialog.show();
             }
         });
     }
@@ -116,19 +135,19 @@ public class Account extends AppCompatActivity {
         String password2 = mPassword2.getText().toString().trim();
 
         if (name.isEmpty()) {
-            mNama.setError("Harap isi Field Nama!");
+            mNama.setError("Please fill this field!");
             mNama.requestFocus();
             return;
         } else if (email.isEmpty()) {
-            mEmail.setError("Harap isi Field Email!");
+            mEmail.setError("Please fill this field!");
             mEmail.requestFocus();
             return;
         }else if (password.isEmpty()) {
-            mPassword.setError("Harap isi Field Password!");
+            mPassword.setError("Please fill this field!");
             mPassword.requestFocus();
             return;
         }else if (password2.isEmpty()) {
-            mPassword2.setError("Harap isi Field Confirm Password!");
+            mPassword2.setError("Please fill this field!");
             mPassword2.requestFocus();
             return;
         }

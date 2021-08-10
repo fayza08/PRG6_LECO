@@ -6,12 +6,15 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.provider.MediaStore;
+import android.text.method.ScrollingMovementMethod;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MenuItem;
@@ -52,11 +55,13 @@ public class AddRecipe extends AppCompatActivity {
     private EditText mStep;
     private EditText mKeterangan;
     private ImageButton mPhotoButton;
+    private ImageButton mGalleryButton;
     private ImageView mPhotoView;
     private File mPhotoFile;
     private Uri mPhotoUri;
     private static final int REQUEST_PHOTO = 2;
-    private ActivityResultLauncher<Intent> activityResultLauncherCamera;
+    int SELECT_PICTURE = 200;
+    private ActivityResultLauncher<Intent> activityResultLauncherCamera, activityResultLauncherGallery;
 
     SharedPreferences sharedPreferences;
     private Integer id_user;
@@ -77,6 +82,10 @@ public class AddRecipe extends AppCompatActivity {
         mKeterangan = findViewById(R.id.keterangan);
         mPhotoButton =  findViewById(R.id.recipe_camera);
         mPhotoView = findViewById(R.id.resep_photo);
+        mGalleryButton = findViewById(R.id.recipe_gallery);
+
+        mAlatBahan.setMovementMethod(new ScrollingMovementMethod());
+        mStep.setMovementMethod(new ScrollingMovementMethod());
 
         PackageManager packageManager = getPackageManager();
 
@@ -102,11 +111,40 @@ public class AddRecipe extends AppCompatActivity {
             }
         });
 
+        activityResultLauncherGallery = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+            if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                Uri selectedImage = result.getData().getData();
+                String[] filePathColumn = {MediaStore.Images.Media.DATA};
+
+                if (selectedImage != null) {
+                    Cursor cursor = this.getContentResolver().query(selectedImage, filePathColumn, null, null, null);
+                    if (cursor != null) {
+                        cursor.moveToFirst();
+                        int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                        String picturePath = cursor.getString(columnIndex);
+
+                        Bitmap bitmap = BitmapFactory.decodeFile(picturePath);
+                        mPhotoView.setImageBitmap(bitmap);
+                        Log.e("Bitmap Gallery" , "Adalah : " +bitmap);
+                        cursor.close();
+                    }
+                }
+            }
+        });
+
         mPhotoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intentTakePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 activityResultLauncherCamera.launch(intentTakePicture);
+            }
+        });
+
+        mGalleryButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentFromGallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                activityResultLauncherGallery.launch(intentFromGallery);
             }
         });
 
@@ -140,21 +178,6 @@ public class AddRecipe extends AppCompatActivity {
         return super.onCreateView(parent, name, context, attrs);
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        Log.i(TAG, "onActivityResult: ");
-        super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode != Activity.RESULT_OK){
-            return;
-        }
-        if(requestCode == REQUEST_PHOTO && resultCode == RESULT_OK && data != null){
-            revokeUriPermission(mPhotoUri,
-                    Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-             Bundle bundle = data.getExtras();
-             Bitmap bitmap =(Bitmap) bundle.get("data");
-            mPhotoView.setImageBitmap(bitmap);
-        }
-    }
 
     private void saveRecipe() {
         String recipe = mResep.getText().toString().trim();
@@ -164,25 +187,34 @@ public class AddRecipe extends AppCompatActivity {
         String foto = "";
         Integer idsp = sharedPreferences.getInt(ID, 0);
         try{
-            foto = (Picture.convertToString(((BitmapDrawable)mPhotoView.getDrawable()).getBitmap()));
+            Bitmap bitmap = Picture.Compress(((BitmapDrawable)mPhotoView.getDrawable()).getBitmap(),50);
+            foto = (Picture.convertToString(bitmap));
+            Log.e("Foto", "Foto :" +foto);
         }catch (Exception e){
             Log.e("RecipeAdd", "gagal menyimpan foto" + e.getMessage());
         }
 
+        Log.e("Foto", "Foto :" +foto);
+        Log.e("resep", "Resep :" +recipe);
+        Log.e("alat", "alat :" +alatbahan);
+        Log.e("langkah", "langkah :" +step);
+        Log.e("ket", "ket :" +keterangan);
+        Log.e("user", "user :" +idsp);
+
         if(recipe.isEmpty()) {
-            mResep.setError("Harap mengisi Field Resep");
+            mResep.setError("Please fill this field!");
             mResep.requestFocus();
             return;
         } else if (alatbahan.isEmpty()) {
-            mAlatBahan.setError("Harap mengisi Field Alat Bahan");
+            mAlatBahan.setError("Please fill this field!");
             mAlatBahan.requestFocus();
             return;
         } else if (step.isEmpty()) {
-            mStep.setError("Harap mengisi Field Tahapan");
+            mStep.setError("Please fill this field!");
             mStep.requestFocus();
             return;
         } else if (keterangan.isEmpty()) {
-            mKeterangan.setError("Harap mengisi Field Keterangan");
+            mKeterangan.setError("Please fill this field!");
             mKeterangan.requestFocus();
             return;
         } else {

@@ -39,8 +39,8 @@ public class MainActivity extends AppCompatActivity {
 
         requestMultiplePermissionLauncher.launch(
                 new String[]{
-//                        Manifest.permission.READ_EXTERNAL_STORAGE,
-                       Manifest.permission.CAMERA
+                        Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.CAMERA
 //                        Manifest.permission.ACCESS_FINE_LOCATION
                 }
         );

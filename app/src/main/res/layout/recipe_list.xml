@@ -11,11 +11,12 @@
 <!--        android:id="@+id/shimmer_view_container2"-->
 <!--        android:layout_width="match_parent"-->
 <!--        android:layout_height="wrap_content">-->
-        <RelativeLayout
+        <LinearLayout
             android:id="@+id/selectResep"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="10dp"
+            android:orientation="horizontal"
             android:layout_gravity="center_vertical"
             android:background="@color/colorSplash">
             <ImageView
@@ -25,7 +26,7 @@
                 android:scaleType="fitXY"
                 android:background="@color/colorAccent"/>
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:layout_marginLeft="10dp"
@@ -48,10 +49,21 @@
                     android:id="@+id/recipe_liked"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:text="Not"
                     android:visibility="invisible"/>
             </LinearLayout>
 
-        </RelativeLayout>
+            <TextView
+                android:id="@+id/recipe_icon"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginRight="5dp"
+                android:fontFamily="@font/poppinsmedium"
+                android:gravity="center"
+                android:drawableEnd="@drawable/ic_search"
+                android:textColor="@color/colorAccent"
+                android:textSize="15sp" />
+        </LinearLayout>
 <!--    </com.facebook.shimmer.ShimmerFrameLayout>-->
 
 </androidx.cardview.widget.CardView>

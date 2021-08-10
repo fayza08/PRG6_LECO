@@ -116,8 +116,7 @@
                 android:id="@+id/updatepassword2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawableEnd="@drawable/ic_password"
-                android:drawableRight="@drawable/ic_password"
+                android:drawableEnd="@drawable/ic_lock2"
                 android:fontFamily="@font/poppinsmedium"
                 android:inputType="textPassword"
                 tools:targetApi="jelly_bean" />

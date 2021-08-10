@@ -56,19 +56,19 @@ public class SignUp extends AppCompatActivity {
         String password2 = mPassword2.getText().toString().trim();
 
         if (name.isEmpty()) {
-            mNama.setError("Harap isi Field Nama!");
+            mNama.setError("Please fill this field!");
             mNama.requestFocus();
             return;
         } else if (email.isEmpty()) {
-            mEmail.setError("Harap isi Field Email!");
+            mEmail.setError("Please fill this field!");
             mEmail.requestFocus();
             return;
         }else if (password.isEmpty()) {
-            mPassword.setError("Harap isi Field Password!");
+            mPassword.setError("Please fill this field!");
             mPassword.requestFocus();
             return;
         }else if (password2.isEmpty()) {
-            mPassword2.setError("Harap isi Field Confirm Password!");
+            mPassword2.setError("Please fill this field!");
             mPassword2.requestFocus();
             return;
         }

@@ -92,7 +92,7 @@ public class Login extends AppCompatActivity {
                     startActivity(new Intent(Login.this, Dashboard.class));
                     mEmail.setText("");
                     mPassword.setText("");
-                    Toast.makeText(Login.this, "Login Berhasil!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(Login.this, "Welcome, Let's Cook Together!", Toast.LENGTH_LONG).show();
                 }else{
                     Toast.makeText(Login.this, "Failed To Login !", Toast.LENGTH_LONG).show();
                 }

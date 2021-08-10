@@ -41,7 +41,6 @@
                 android:layout_marginLeft="30dp"
                 android:layout_marginTop="30dp"
                 android:layout_marginRight="30dp"
-                android:hint="@string/camera"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
@@ -59,7 +58,17 @@
                     android:id="@+id/recipe_camera"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:src="@android:drawable/ic_menu_camera" />
+                    android:src="@android:drawable/ic_menu_camera"
+                    android:background="@color/colorSplash"
+                    android:layout_marginTop="5dp"/>
+
+                <ImageButton
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/recipeedit_gallery"
+                    android:src="@android:drawable/ic_menu_gallery"
+                    android:layout_marginTop="5dp"
+                    android:background="@color/colorFont"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -80,8 +89,7 @@
                     android:id="@+id/editresep"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:drawableEnd="@drawable/ic_recipe"
-                    android:drawableRight="@drawable/ic_recipe"
+                    android:drawableEnd="@drawable/ic_food"
                     android:fontFamily="@font/poppinsmedium"
                     android:inputType="textPersonName"
                     tools:targetApi="jelly_bean" />
@@ -101,11 +109,11 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/editalatbahan"
-                    android:inputType="textPersonName"
+                    android:scrollbars="vertical"
+                    android:lines="2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:drawableEnd="@drawable/ic_recipe"
-                    android:drawableRight="@drawable/ic_recipe"
+                    android:drawableEnd="@drawable/ic_ingredients"
                     android:fontFamily="@font/poppinsmedium"
                     tools:targetApi="jelly_bean" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -122,11 +130,11 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/editstep"
-                    android:inputType="textPersonName"
+                    android:scrollbars="vertical"
+                    android:lines="2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:drawableEnd="@drawable/ic_recipe"
-                    android:drawableRight="@drawable/ic_recipe"
+                    android:drawableEnd="@drawable/ic_steps"
                     android:fontFamily="@font/poppinsmedium"
                     tools:targetApi="jelly_bean" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -146,8 +154,7 @@
                     android:inputType="textPersonName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:drawableEnd="@drawable/ic_recipe"
-                    android:drawableRight="@drawable/ic_recipe"
+                    android:drawableEnd="@drawable/ic_desc"
                     android:fontFamily="@font/poppinsmedium"
                     tools:targetApi="jelly_bean" />
             </com.google.android.material.textfield.TextInputLayout>

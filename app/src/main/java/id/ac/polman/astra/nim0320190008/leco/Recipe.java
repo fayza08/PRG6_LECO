@@ -107,48 +107,4 @@ public class Recipe extends AppCompatActivity {
             }
         });
     }
-
-//    private void saveRecipe() {
-//        String recipe = mResep.getText().toString().trim();
-//        String alatbahan = mAlatBahan.getText().toString().trim();
-//        String step = mStep.getText().toString().trim();
-//        String keterangan = mKeterangan.getText().toString().trim();
-//        Integer idsp = sharedPreferences.getInt(ID, 0);
-//
-//        if(recipe.isEmpty()) {
-//            mResep.setError("Harap mengisi Field Resep");
-//            mResep.requestFocus();
-//            return;
-//        } else if (alatbahan.isEmpty()) {
-//            mAlatBahan.setError("Harap mengisi Field Alat Bahan");
-//            mAlatBahan.requestFocus();
-//            return;
-//        } else if (step.isEmpty()) {
-//            mStep.setError("Harap mengisi Field Tahapan");
-//            mStep.requestFocus();
-//            return;
-//        } else if (keterangan.isEmpty()) {
-//            mKeterangan.setError("Harap mengisi Field Keterangan");
-//            mKeterangan.requestFocus();
-//            return;
-//        } else {
-//            mResepService = ApiUtils.getResepService();
-//            Call<Resep> call = mResepService.addResep(new Resep(0,idsp,recipe,alatbahan,step,1,keterangan,null,0));
-//            call.enqueue(new Callback<Resep>() {
-//                @Override
-//                public void onResponse(Call<Resep> call, Response<Resep> response) {
-//                    if(response != null) {
-//                        Toast.makeText(Recipe.this,"Data Saved Succesfully", Toast.LENGTH_LONG).show();
-//                        startActivity(new Intent(Recipe.this,Login.class));
-//                    }
-//                }
-//
-//                @Override
-//                public void onFailure(Call<Resep> call, Throwable t) {
-//                    Log.e("Create Error : ", t.getMessage());
-//                    Toast.makeText(Recipe.this, "Data Gagal Disimpan", Toast.LENGTH_LONG).show();
-//                }
-//            });
-//        }
-//    }
 }

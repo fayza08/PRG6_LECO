@@ -1,20 +1,27 @@
 package id.ac.polman.astra.nim0320190008.leco;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,15 +39,20 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static android.content.ContentValues.TAG;
+
 public class recipe_detail extends AppCompatActivity {
 
     TextView desc, title, ingredients, steps, liked;
     private DisukaiService mDisukaiService;
     private ResepService mResepService;
-
+    private ImageView mPhotoView;
     private Resep mResep;
     private final static String APP_NAME= "LECO";
     private final static String ID = "id";
+    private static final int REQUEST_PHOTO = 2;
+    private ActivityResultLauncher<Intent> activityResultLauncherCamera;
+    private Uri mPhotoUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +64,15 @@ public class recipe_detail extends AppCompatActivity {
         ingredients = findViewById(R.id.detail_ingredients);
         steps = findViewById(R.id.detail_step);
         liked = findViewById(R.id.detail_liked);
+        mPhotoView = findViewById(R.id.detail_foto);
+
+        activityResultLauncherCamera = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+            if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                Bundle bundle = result.getData().getExtras();
+                Bitmap bitmap = (Bitmap) bundle.get("data");
+                mPhotoView.setImageBitmap(bitmap);
+            }
+        });
 
         Intent intent = getIntent();
 
@@ -62,12 +83,19 @@ public class recipe_detail extends AppCompatActivity {
             ingredients.setText(mResep.getAlat_bahan());
             steps.setText(mResep.getTahap());
             liked.setText(mResep.getNilai().toString());
+            String fotodetail = mResep.getFoto();
             String fav = intent.getStringExtra("fav");
 
             if(fav.equals("Liked")){
                 liked.setCompoundDrawablesWithIntrinsicBounds(null, null, ContextCompat.getDrawable(this,R.drawable.ic_like), null);
             }else{
                 liked.setCompoundDrawablesWithIntrinsicBounds(null, null, ContextCompat.getDrawable(this,R.drawable.ic_liked), null);
+            }
+
+            if (fotodetail == null || fotodetail.equals("")) {
+
+            } else {
+                mPhotoView.setImageBitmap(Picture.convertToImage(fotodetail));
             }
 
         }
@@ -100,6 +128,22 @@ public class recipe_detail extends AppCompatActivity {
                 return false;
             }
         });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        Log.i(TAG, "onActivityResult: ");
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode != Activity.RESULT_OK){
+            return;
+        }
+        if(requestCode == REQUEST_PHOTO && resultCode == RESULT_OK && data != null){
+            revokeUriPermission(mPhotoUri,
+                    Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+            Bundle bundle = data.getExtras();
+            Bitmap bitmap =(Bitmap) bundle.get("data");
+            mPhotoView.setImageBitmap(bitmap);
+        }
     }
 
     private void like(Integer idsp){

@@ -27,5 +27,5 @@ public interface ResepService {
     Call<Resep> updateResep(@Body Resep resep);
 
     @DELETE("resep")
-    Call<User> deleteResepById(@Query("id") Integer id);
+    Call<Resep> deleteResepById(@Query("id") Integer id);
 }

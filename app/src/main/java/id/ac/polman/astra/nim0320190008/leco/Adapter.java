@@ -1,6 +1,7 @@
 package id.ac.polman.astra.nim0320190008.leco;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
@@ -11,11 +12,13 @@ import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -30,6 +33,7 @@ import id.ac.polman.astra.nim0320190008.leco.api.ApiUtils;
 import id.ac.polman.astra.nim0320190008.leco.api.DisukaiService;
 import id.ac.polman.astra.nim0320190008.leco.api.Resep;
 import id.ac.polman.astra.nim0320190008.leco.api.ResepService;
+import id.ac.polman.astra.nim0320190008.leco.api.User;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -37,9 +41,10 @@ import retrofit2.Response;
 import static android.content.Context.MODE_PRIVATE;
 
 public class Adapter extends RecyclerView.Adapter<Adapter.AdapterHolder> implements Filterable {
-
+    private ResepService mResepService;
     SharedPreferences sharedPreferences;
     private Integer id_user;
+    private Integer id_resep;
     private final static String APP_NAME= "LECO";
     private final static String ID = "id";
     private DisukaiService mDisukaiService;
@@ -59,11 +64,6 @@ public class Adapter extends RecyclerView.Adapter<Adapter.AdapterHolder> impleme
     @NonNull
     @Override
     public Adapter.AdapterHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-//        mContext = parent.getContext();
-//        View view =  LayoutInflater.from(mContext).inflate(R.layout.recipe_list, parent, false);
-//        AdapterHolder holder = new AdapterHolder(view);
-//        return holder;
-
         View view = LayoutInflater.from(mContext).inflate(R.layout.recipe_list, parent, false);
         AdapterHolder holder = new AdapterHolder(view);
         return holder;
@@ -95,12 +95,41 @@ public class Adapter extends RecyclerView.Adapter<Adapter.AdapterHolder> impleme
                     for( Resep r : reseps){
                         if(resep.getId().equals(r.getId())){liked = true;}
                     }
-                    if(liked){
-                        holder.fav.setText("Liked");
-                        holder.keterangan.setCompoundDrawablesWithIntrinsicBounds(null, null, ContextCompat.getDrawable(mContext,R.drawable.ic_like), null);
-                    }else {
-                        holder.keterangan.setCompoundDrawablesWithIntrinsicBounds(null, null, ContextCompat.getDrawable(mContext, R.drawable.ic_liked), null);
-                    }
+                    if(mText.equals("Dashboard")){
+                        if(liked){
+                            holder.fav.setText("Liked");
+                            holder.icon.setCompoundDrawablesWithIntrinsicBounds(null, null, ContextCompat.getDrawable(mContext,R.drawable.ic_like), null);
+                        }else{
+                            holder.fav.setText("Not");
+                            holder.icon.setCompoundDrawablesWithIntrinsicBounds(null, null, ContextCompat.getDrawable(mContext, R.drawable.ic_liked), null);
+                        }
+                    }else{
+                        holder.icon.setCompoundDrawablesWithIntrinsicBounds(null, null, ContextCompat.getDrawable(mContext,R.drawable.ic_delete), null);
+                        holder.icon.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                                builder.setCancelable(true);
+                                builder.setTitle("Delete");
+                                builder.setMessage("Confirm Deletion!");
+                                builder.setPositiveButton("Yes",
+                                        new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                deleteResep(resep.getId());
+                                            }
+                                        });
+                                builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                    }
+                                });
+
+                                AlertDialog dialog = builder.create();
+                                dialog.show();
+                            }
+                        });
+                     }
                 }
             }
 
@@ -110,7 +139,6 @@ public class Adapter extends RecyclerView.Adapter<Adapter.AdapterHolder> impleme
 //                Toast.makeText(Recipe.this, "Gagal Get Data!", Toast.LENGTH_LONG).show();
             }
         });
-
 
         if (image == null || image.equals("")) {
         Glide.with(holder.itemView.getContext()).load(pathImage)
@@ -127,6 +155,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.AdapterHolder> impleme
                     Intent intent = new Intent(mContext, recipe_detail.class);
                     intent.putExtra("data", resep);
                     intent.putExtra("fav", holder.fav.getText().toString());
+                    intent.putExtra("fotodetail", resep.getFoto());
                     mContext.startActivity(intent);
                 }else{
                     Log.e("Adapter","Berhasil Masuk Edit");
@@ -137,8 +166,29 @@ public class Adapter extends RecyclerView.Adapter<Adapter.AdapterHolder> impleme
                     intent.putExtra("alat", resep.getAlat_bahan());
                     intent.putExtra("tahap",resep.getTahap());
                     intent.putExtra("ket", resep.getKeterangan());
+                    intent.putExtra("foto", resep.getFoto());
                     mContext.startActivity(intent);
                 }
+            }
+        });
+    }
+
+    private void deleteResep(int id_resep){
+        Log.e("Id Resep", "id" + id_resep);
+        mResepService = ApiUtils.getResepService();
+        Call<Resep> call = mResepService.deleteResepById(id_resep);
+        call.enqueue(new Callback<Resep>() {
+            @Override
+            public void onResponse(Call<Resep> call, Response<Resep> response) {
+                Log.e("Id Resep", "id" + response);
+                if(response != null){
+                    Toast.makeText(mContext, "Recipe successfully deleted!", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Resep> call, Throwable t) {
+                Log.e("Delete Error : ", t.getMessage());
             }
         });
     }
@@ -185,9 +235,9 @@ public class Adapter extends RecyclerView.Adapter<Adapter.AdapterHolder> impleme
 
 
     public class AdapterHolder extends RecyclerView.ViewHolder {
-        TextView title, keterangan, fav;
+        TextView title, keterangan, fav, icon;
         ImageView foto;
-        RelativeLayout select;
+        LinearLayout select;
 
         public AdapterHolder(@NonNull View itemView) {
             super(itemView);
@@ -197,21 +247,8 @@ public class Adapter extends RecyclerView.Adapter<Adapter.AdapterHolder> impleme
             foto = itemView.findViewById(R.id.recipe_list_image);
             fav = itemView.findViewById(R.id.recipe_liked);
             select = itemView.findViewById(R.id.selectResep);
+            icon = itemView.findViewById(R.id.recipe_icon);
         }
-
-//        @Override
-//        public void onClick(View v) {
-//
-//            Log.e("Adapter","Berhasil Masuk Edit");
-//
-//            Intent intent = new Intent(mContext, EditRecipe.class);
-//            intent.putExtra("id", mResep.getId());
-//            intent.putExtra("nama", mResep.getNama());
-//            intent.putExtra("alat", mResep.getAlat_bahan());
-//            intent.putExtra("tahap",mResep.getTahap());
-//            intent.putExtra("ket", mResep.getKeterangan());
-//            mContext.startActivity(intent);
-//
-//        }
     }
+
 }

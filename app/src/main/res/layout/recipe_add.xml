@@ -40,9 +40,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="30dp"
-                android:layout_marginTop="30dp"
                 android:layout_marginRight="30dp"
-                android:hint="@string/camera"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
@@ -60,7 +58,17 @@
                     android:id="@+id/recipe_camera"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:src="@android:drawable/ic_menu_camera" />
+                    android:src="@android:drawable/ic_menu_camera"
+                    android:background="@color/colorSplash"
+                    android:layout_marginTop="5dp"/>
+
+                <ImageButton
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/recipe_gallery"
+                    android:src="@android:drawable/ic_menu_gallery"
+                    android:background="@color/colorFont"
+                    android:layout_marginTop="5dp"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -82,8 +90,8 @@
                     android:id="@+id/resep"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:drawableEnd="@drawable/ic_recipe"
-                    android:drawableRight="@drawable/ic_recipe"
+                    android:drawableEnd="@drawable/ic_food"
+                    android:drawableRight="@drawable/ic_food"
                     android:fontFamily="@font/poppinsmedium"
                     android:inputType="textPersonName"
                     tools:targetApi="jelly_bean" />
@@ -103,11 +111,12 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/alatbahan"
-                    android:inputType="textPersonName"
+                    android:scrollbars="vertical"
+                    android:lines="2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:drawableEnd="@drawable/ic_recipe"
-                    android:drawableRight="@drawable/ic_recipe"
+                    android:drawableEnd="@drawable/ic_ingredients"
+                    android:drawableRight="@drawable/ic_ingredients"
                     android:fontFamily="@font/poppinsmedium"
                     tools:targetApi="jelly_bean" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -124,11 +133,12 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/step"
-                    android:inputType="textPersonName"
+                    android:scrollbars="vertical"
+                    android:lines="2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:drawableEnd="@drawable/ic_recipe"
-                    android:drawableRight="@drawable/ic_recipe"
+                    android:drawableEnd="@drawable/ic_steps"
+                    android:drawableRight="@drawable/ic_steps"
                     android:fontFamily="@font/poppinsmedium"
                     tools:targetApi="jelly_bean" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -148,8 +158,8 @@
                     android:inputType="textPersonName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:drawableEnd="@drawable/ic_recipe"
-                    android:drawableRight="@drawable/ic_recipe"
+                    android:drawableEnd="@drawable/ic_desc"
+                    android:drawableRight="@drawable/ic_desc"
                     android:fontFamily="@font/poppinsmedium"
                     tools:targetApi="jelly_bean" />
             </com.google.android.material.textfield.TextInputLayout>
